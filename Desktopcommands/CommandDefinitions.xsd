@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CommandDefinitions"
+    targetNamespace="CommandDefinitions"
+    elementFormDefault="qualified"
+    xmlns="CommandDefinitions"
+    xmlns:mstns="CommandDefinitions"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Commands">
+    <xs:complexType>
+      <xs:sequence>
+        
+        <xs:element name="Command" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              
+              <xs:element name="CustomProperties" maxOccurs="1" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    
+                    <xs:element name="Property" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:attribute name="key" type="xs:string" use="required"/>
+                        <xs:attribute name="value" type="xs:string" use="required"/>
+                      </xs:complexType>
+                    </xs:element>
+                    
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+          </xs:complexType>
+        </xs:element>
+        
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+</xs:schema>
