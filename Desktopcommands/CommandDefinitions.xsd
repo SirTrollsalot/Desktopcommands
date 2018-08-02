@@ -30,6 +30,8 @@
               
             </xs:sequence>
             <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="call" type="xs:string" use="required"/>
+            <xs:attribute name="shortcall" type="xs:string" use="optional"/>
           </xs:complexType>
         </xs:element>
         

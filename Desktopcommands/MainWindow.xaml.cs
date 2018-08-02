@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Configuration;
-using System.ComponentModel;
+using Desktopcommands.Commands;
+using Desktopcommands.Utilities;
 
 namespace Desktopcommands
 {
@@ -24,6 +15,8 @@ namespace Desktopcommands
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow AppWindow;
+
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
@@ -34,18 +27,79 @@ namespace Desktopcommands
         
 
         //Modifiers:
-        private uint MOD_CONTROL = Getconfig<uint>("ShortcutModifier"); //CTRL
+        private uint MOD_CONTROL = Utils.Getconfig<uint>("ShortcutModifier"); //CTRL
         //Space:
-        private uint VK_SPACE = Getconfig<uint>("ShortcutKey");
+        private uint VK_SPACE = Utils.Getconfig<uint>("ShortcutKey");
+        private CommandExecuter CommExec = new CommandExecuter();
+        public ObservableCollection<String> _responseListboxItems = new ObservableCollection<String>();
+        public ObservableCollection<String> ResponseListboxItems
+        {
+            get
+            {
+                return _responseListboxItems;
+            }
+            set
+            {
+                _responseListboxItems.Clear();
+                foreach(String s in value)
+                {
+                    _responseListboxItems.Add(s);
+                }
+            }
+        }
+
 
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
+            AppWindow = this;
+            HistoryManager.LoadHistory();
         }
 
+        public void Done()
+        {
+            Dispatcher.Invoke(()=> {
+                this.Visibility = Visibility.Hidden;
+                Inputfield.Clear();
+                foreach(UIElement e in AdditionalFields.Children)
+                {
+                    ResponseListboxItems.Clear();
+                }
+            });
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            _source.RemoveHook(HwndHook);
+            UnregisterHotKey(_windowHandle, HOTKEY_ID);
+            HistoryManager.SaveHistory();
+            base.OnClosed(e);
+        }
+
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            Done();
+            base.OnLostFocus(e);
+        }
+        
+        private void HandleEnter(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                String input = Inputfield.Text.Trim();
+                HistoryManager.AddToHistory(input);
+                if (!CommExec.ExecuteAsync(input))
+                {
+                    Done();
+                }
+            }
+        }
+        
         //For opening Window when Hotkey pressed (CTRL + SPACEBAR)
         private IntPtr _windowHandle;
         private HwndSource _source;
+
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
@@ -67,7 +121,7 @@ namespace Desktopcommands
                 {
                     if(this.IsVisible)
                     {
-                        this.Visibility = Visibility.Hidden;
+                        Done();
                     }
                     else
                     {
@@ -79,44 +133,6 @@ namespace Desktopcommands
             }
             return IntPtr.Zero;
         }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            _source.RemoveHook(HwndHook);
-            UnregisterHotKey(_windowHandle, HOTKEY_ID);
-            base.OnClosed(e);
-        }
-
-        protected override void OnLostFocus(RoutedEventArgs e)
-        {
-            this.Visibility = Visibility.Hidden;
-            base.OnLostFocus(e);
-        }
-
-        public static T Getconfig<T>(string key)
-        {
-            try
-            {
-                var converter = TypeDescriptor.GetConverter(typeof(T));
-                if(converter != null)
-                {
-                    return (T)converter.ConvertFromString(ConfigurationManager.AppSettings.Get(key));
-                }
-                return default(T);
-            }
-            catch (NotSupportedException)
-            {
-                return default(T);
-            }
-        }
-
-        private void HandleEnter(object sender, KeyEventArgs e)
-        {
-            if(e.Key == Key.Return)
-            {
-                String input = Inputfield.Text;
-                //TODO - EXECUTE COMMAND
-            }
-        }
+        
     }
 }

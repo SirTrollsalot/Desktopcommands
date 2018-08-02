@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utilities\HistoryManager.cs" />
+    <Compile Include="Utilities\Utils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,9 +65,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Command.cs" />
-    <Compile Include="CommandDefinitionManager.cs" />
-    <Compile Include="CommandManager.cs" />
+    <Compile Include="Commands\Command_History.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Utilities\CommandDefinitionManager.cs" />
+    <Compile Include="Utilities\CommandExecuter.cs" />
     <Compile Include="ListCountVisibleConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -66,7 +66,7 @@ namespace Desktopcommands.Properties {
         ///  xmlns=&quot;CommandDefinitions&quot;
         ///  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
         ///  xsi:schemaLocation=&quot;CommandDefinitions CommandDefinitions.xsd&quot;&gt;
-        ///  &lt;Command name=&quot;history&quot;&gt;&lt;/Command&gt;
+        ///  &lt;Command name=&quot;Command_History&quot; call=&quot;history&quot; shortcall=&quot;hist&quot;&gt;&lt;/Command&gt;
         ///&lt;/Commands&gt;
         /// ähnelt.
         /// </summary>

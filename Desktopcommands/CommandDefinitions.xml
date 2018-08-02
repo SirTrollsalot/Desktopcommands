@@ -3,5 +3,5 @@
   xmlns="CommandDefinitions"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="CommandDefinitions CommandDefinitions.xsd">
-  <Command name="history"></Command>
+  <Command name="Command_History" call="history" shortcall="hist"></Command>
 </Commands>

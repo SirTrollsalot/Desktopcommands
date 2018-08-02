@@ -5,19 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Desktopcommands
+namespace Desktopcommands.Utilities
 {
     static class CommandDefinitionManager
     {
         private static XElement commands = XDocument.Parse(Properties.Resources.CommandDefinitions).Root;
 
         
-        public static List<String> GetAllCommands()
+        public static Dictionary<List<String>, String> GetAllCommands()
         {
-            List<String> ret = new List<String>();
+            Dictionary<List<String>, String> ret = new Dictionary<List<String>, String>();
             foreach(var com in commands.Elements())
             {
-                ret.Add(com.Attribute("name").Value);
+                List<String> calls = new List<string>();
+                calls.Add(com.Attribute("call").Value);
+                if (com.Attribute("shortcall") != null) calls.Add(com.Attribute("shortcall").Value);
+                ret.Add(calls, com.Attribute("name").Value);
             }
             return ret;
         }

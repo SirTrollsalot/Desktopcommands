@@ -66,13 +66,15 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <Separator x:Name="Seperator" Visibility="{Binding ElementName=Responsebox, 
+                    <StackPanel x:Name="AdditionalFields">
+                        <Separator x:Name="Seperator" Visibility="{Binding ElementName=ResponseListBox, 
                               Path=Items.Count, 
                               Converter={StaticResource hideElement}}" Background="{StaticResource BorderColor}"></Separator>
-                    <ListBox x:Name="Responsebox" MaxHeight="300" Visibility="{Binding ElementName=Responsebox, 
+                        <ListBox x:Name="ResponseListBox" MaxHeight="300" ItemsSource="{Binding Path=ResponseListboxItems}" Visibility="{Binding ElementName=ResponseListBox, 
                               Path=Items.Count,Converter={StaticResource hideElement}}" Background="{StaticResource BgColor}" BorderBrush="{StaticResource BgColor}" 
-                              FontSize="{StaticResource FontSize}" FontWeight="Bold" KeyDown="HandleEnter">
-                    </ListBox>
+                              FontSize="{StaticResource FontSize}" FontWeight="Bold" KeyDown="HandleEnter" IsSynchronizedWithCurrentItem="True">
+                        </ListBox>
+                    </StackPanel>
                 </StackPanel>
             </Border>
         </Border>
