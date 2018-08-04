@@ -16,7 +16,7 @@ namespace Desktopcommands.Commands.CommandUtilities
             ApplicationName = "Desktopcommands"
         });
 
-        public static Dictionary<string,string> SearchVideos(string term, int maxresults)
+        public static List<string[]> SearchVideos(string term, int maxresults)
         {
             var searchListRequest = youtubeService.Search.List("snippet");
             searchListRequest.Q = term; // Replace with your search term.
@@ -26,18 +26,18 @@ namespace Desktopcommands.Commands.CommandUtilities
             // Call the search.list method to retrieve results matching the specified query term.
             var searchListResponse = searchListRequest.Execute();
 
-            Dictionary<string, string> videos = new Dictionary<string, string>();
+            List<string[]> videos = new List<string[]>();
 
             // Add each result to the appropriate list, and then display the lists of
             // matching videos, channels, and playlists.
             foreach (var searchResult in searchListResponse.Items)
             {
-                videos.Add(searchResult.Snippet.Title, searchResult.Id.VideoId);
+                videos.Add(new String[] { searchResult.Id.VideoId, searchResult.Snippet.Title });
             }
             return videos;
         }
         
-        public static Dictionary<string,string> SearchPlaylists(string term, int maxresults)
+        public static List<string[]> SearchPlaylists(string term, int maxresults)
         {
             var searchListRequest = youtubeService.Search.List("snippet");
             searchListRequest.Q = term; // Replace with your search term.
@@ -47,13 +47,13 @@ namespace Desktopcommands.Commands.CommandUtilities
             // Call the search.list method to retrieve results matching the specified query term.
             var searchListResponse = searchListRequest.Execute();
 
-            Dictionary<string, string> playlist = new Dictionary<string, string>();
+            List<string[]> playlist = new List<string[]>();
 
             // Add each result to the appropriate list, and then display the lists of
             // matching videos, channels, and playlists.
             foreach (var searchResult in searchListResponse.Items)
             {
-                playlist.Add(searchResult.Snippet.Title, searchResult.Id.PlaylistId);
+                playlist.Add(new String[] { searchResult.Id.PlaylistId, searchResult.Snippet.Title });
             }
             return playlist;
         }

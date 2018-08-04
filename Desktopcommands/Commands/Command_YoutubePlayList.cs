@@ -20,7 +20,9 @@ namespace Desktopcommands.Commands
     public class Command_YoutubePlayList : Command
     {
         string term;
-        Dictionary<string, string> playlists;
+        List<string[]> playlists;
+        List<string> playlistnames = new List<string>();
+        List<string> playlistids = new List<string>();
         public Command_YoutubePlayList(string args) : base("Command_YoutubePlayList")
         {
             term = args;
@@ -30,15 +32,20 @@ namespace Desktopcommands.Commands
         {
             if (term.Length < 1) return;
             playlists = Youtube.SearchPlaylists(term, 10);
+            foreach (string[] s in playlists)
+            {
+                playlistids.Add(s[0]);
+                playlistnames.Add(s[1]);
+            }
             ResponseBox.KeyDown(EventHandler);
-            ResponseBox.SetItems(playlists.Keys.ToList());
+            ResponseBox.SetItems(playlistnames);
         }
 
         public void EventHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                string id = playlists[ResponseBox.SelectedItem()];
+                string id = playlistids[ResponseBox.SelectedIndex()];
                 string url = Youtube.GetPlaylistUrlfromID(id);
                 try
                 {

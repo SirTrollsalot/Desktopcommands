@@ -20,7 +20,9 @@ namespace Desktopcommands.Commands
     public class Command_Youtube : Command
     {
         string term;
-        Dictionary<string, string> videos;
+        List<string[]> videos;
+        List<string> videonames = new List<string>();
+        List<string> videoids = new List<string>();
         public Command_Youtube(string args) : base("Command_Youtube")
         {
             term = args;
@@ -30,15 +32,20 @@ namespace Desktopcommands.Commands
         {
             if (term.Length < 1) return;
             videos = Youtube.SearchVideos(term, 10);
+            foreach(string[] s in videos){
+                videoids.Add(s[0]);
+                videonames.Add(s[1]);
+            }
             ResponseBox.KeyDown(EventHandler);
-            ResponseBox.SetItems(videos.Keys.ToList());
+            ResponseBox.SetItems(videonames);
         }
 
         public void EventHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                string url = Youtube.GetVideoUrlfromID(videos[ResponseBox.SelectedItem()]);
+
+                string url = Youtube.GetVideoUrlfromID( videoids[ResponseBox.SelectedIndex()]);
                 try
                 {
                     Process.Start("chrome.exe", url);
