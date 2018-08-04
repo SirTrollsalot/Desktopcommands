@@ -10,26 +10,25 @@ namespace Desktopcommands.Utilities
 {
     public class CommandExecuter
     {
-        private Dictionary<List<String>,String> commands = CommandDefinitionManager.GetAllCommands();
+        private Dictionary<List<string>,string> commands = CommandDefinitionManager.GetAllCommands();
 
-        public bool ExecuteAsync(String input)
+        public Command Execute(string input)
         {
-            String commandcall = input.Split(' ')[0];
-            String args = input.Remove(0,commandcall.Length);
-            String commandname;
-            List<String> Calls = commands.Keys.Where(li => li.Contains(commandcall)).FirstOrDefault();
-            if (Calls == null || !commands.TryGetValue(Calls, out commandname))
+            string commandcall = input.Split(' ')[0];
+            string args = input.Remove(0,commandcall.Length).Trim();
+            List<string> Calls = commands.Keys.Where(li => li.Contains(commandcall)).FirstOrDefault();
+            if (Calls == null || !commands.TryGetValue(Calls, out string commandname))
             {
-                return false;
+                return null;
             }
             Command command = GetCommand(commandname, args);
-            Task.Run(() => command.Execute());
-            return true;
+            command.Execute();
+            return command;
         }
 
-        private Command GetCommand(String commandname, String args)
+        private Command GetCommand(string commandname, string args)
         {
-            String typename = typeof(Command).AssemblyQualifiedName.Replace("Desktopcommands.Commands.Command", "Desktopcommands.Commands."+commandname);
+            string typename = typeof(Command).AssemblyQualifiedName.Replace("Desktopcommands.Commands.Command", "Desktopcommands.Commands."+commandname);
             return (Command)Activator.CreateInstance(Type.GetType(typename),args);
         }
         

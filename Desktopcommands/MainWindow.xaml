@@ -14,6 +14,8 @@
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         SizeToContent="Height"
+        Closing="Window_Closing"
+        Topmost="True"
         >
     <Window.Resources>
         <local:ListCountVisibleConverter x:Key="hideElement"/>
@@ -70,9 +72,9 @@
                         <Separator x:Name="Seperator" Visibility="{Binding ElementName=ResponseListBox, 
                               Path=Items.Count, 
                               Converter={StaticResource hideElement}}" Background="{StaticResource BorderColor}"></Separator>
-                        <ListBox x:Name="ResponseListBox" MaxHeight="300" ItemsSource="{Binding Path=ResponseListboxItems}" Visibility="{Binding ElementName=ResponseListBox, 
+                        <ListBox x:Name="ResponseListBox" MaxHeight="300" ItemsSource="{Binding Path=ResponseListBoxItems}" Visibility="{Binding ElementName=ResponseListBox, 
                               Path=Items.Count,Converter={StaticResource hideElement}}" Background="{StaticResource BgColor}" BorderBrush="{StaticResource BgColor}" 
-                              FontSize="{StaticResource FontSize}" FontWeight="Bold" KeyDown="HandleEnter" IsSynchronizedWithCurrentItem="True">
+                              FontSize="{StaticResource FontSize}" FontWeight="Bold" IsSynchronizedWithCurrentItem="True">
                         </ListBox>
                     </StackPanel>
                 </StackPanel>

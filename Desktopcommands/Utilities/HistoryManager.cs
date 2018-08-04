@@ -9,23 +9,28 @@ namespace Desktopcommands.Utilities
 {
     public static class HistoryManager
     {
-        private static HashSet<String> history = new HashSet<String>();
+        private static List<string> history = new List<string>();
 
-        public static HashSet<String> GetHistory()
+        public static List<string> GetHistory()
         {
             return history;
         }
 
-        public static void AddToHistory(String entry)
+        public static void AddToHistory(string entry)
         {
-            history.Add(entry);
+            history.Insert(0,entry);
+            history = history.Distinct().ToList();
         }
 
         public static void LoadHistory()
         {
-            var lines = File.ReadLines(@"History.txt");
-            foreach (String line in lines)
-                history.Add(line);
+            try
+            {
+                var lines = File.ReadLines(@"History.txt");
+                foreach (string line in lines)
+                    history.Add(line);
+            }catch(FileNotFoundException){}
+            
         }
 
         public static void SaveHistory()
@@ -35,7 +40,11 @@ namespace Desktopcommands.Utilities
         
         public static void ClearHistory()
         {
-            File.Delete(@"History.txt");
+            try
+            {
+                File.Delete(@"History.txt");
+            }
+            catch (Exception) { }
             history.Clear();
         }
 

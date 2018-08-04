@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +24,7 @@ namespace Desktopcommands
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
+        private Command CurrentCommand;
         private const int HOTKEY_ID = 9000;
         
 
@@ -31,8 +33,8 @@ namespace Desktopcommands
         //Space:
         private uint VK_SPACE = Utils.Getconfig<uint>("ShortcutKey");
         private CommandExecuter CommExec = new CommandExecuter();
-        public ObservableCollection<String> _responseListboxItems = new ObservableCollection<String>();
-        public ObservableCollection<String> ResponseListboxItems
+        public ObservableCollection<string> _responseListboxItems = new ObservableCollection<string>();
+        public ObservableCollection<string> ResponseListBoxItems
         {
             get
             {
@@ -41,7 +43,7 @@ namespace Desktopcommands
             set
             {
                 _responseListboxItems.Clear();
-                foreach(String s in value)
+                foreach(string s in value)
                 {
                     _responseListboxItems.Add(s);
                 }
@@ -62,19 +64,16 @@ namespace Desktopcommands
             Dispatcher.Invoke(()=> {
                 this.Visibility = Visibility.Hidden;
                 Inputfield.Clear();
-                foreach(UIElement e in AdditionalFields.Children)
-                {
-                    ResponseListboxItems.Clear();
-                }
+                Inputfield.Focus();
+                ResponseListBoxItems.Clear();
             });
         }
-
-        protected override void OnClosed(EventArgs e)
+        
+        private void Window_Closing(object sender, EventArgs e)
         {
+            HistoryManager.SaveHistory();
             _source.RemoveHook(HwndHook);
             UnregisterHotKey(_windowHandle, HOTKEY_ID);
-            HistoryManager.SaveHistory();
-            base.OnClosed(e);
         }
 
         protected override void OnLostFocus(RoutedEventArgs e)
@@ -87,12 +86,14 @@ namespace Desktopcommands
         {
             if (e.Key == Key.Return)
             {
-                String input = Inputfield.Text.Trim();
-                HistoryManager.AddToHistory(input);
-                if (!CommExec.ExecuteAsync(input))
+                
+                string input = Inputfield.Text.Trim();
+                CurrentCommand = CommExec.Execute(input);
+                if (CurrentCommand == null)
                 {
                     Done();
                 }
+                HistoryManager.AddToHistory(input);
             }
         }
         
@@ -103,7 +104,6 @@ namespace Desktopcommands
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
-
             _windowHandle = new WindowInteropHelper(this).Handle;
             _source = HwndSource.FromHwnd(_windowHandle);
             _source.AddHook(HwndHook);

@@ -12,12 +12,12 @@ namespace Desktopcommands.Utilities
         private static XElement commands = XDocument.Parse(Properties.Resources.CommandDefinitions).Root;
 
         
-        public static Dictionary<List<String>, String> GetAllCommands()
+        public static Dictionary<List<string>, string> GetAllCommands()
         {
-            Dictionary<List<String>, String> ret = new Dictionary<List<String>, String>();
+            Dictionary<List<string>, string> ret = new Dictionary<List<string>, string>();
             foreach(var com in commands.Elements())
             {
-                List<String> calls = new List<string>();
+                List<string> calls = new List<string>();
                 calls.Add(com.Attribute("call").Value);
                 if (com.Attribute("shortcall") != null) calls.Add(com.Attribute("shortcall").Value);
                 ret.Add(calls, com.Attribute("name").Value);
@@ -25,7 +25,7 @@ namespace Desktopcommands.Utilities
             return ret;
         }
 
-        public static String GetProperty(String command, String property)
+        public static string GetProperty(string command, string property)
         {
             XElement currentcomm = commands.Elements().Where(c => c.Attribute("name").Value == command).First();
             if (currentcomm.Elements().Any())

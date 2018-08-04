@@ -5,26 +5,22 @@ using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
 using Desktopcommands.Utilities;
+using Desktopcommands.ResponseFields;
 
 namespace Desktopcommands.Commands
 {
-    public class Command
+    public abstract class Command
     {
-        public String name;
-
-        public Command(String cname)
-        {
-            name = cname;
+        public string Name { get; private set; }
+        public Command(string cname) {
+            Name = cname;
         }
 
-        public String GetProperty(String property)
+        public string GetProperty(string property)
         {
-            return CommandDefinitionManager.GetProperty(name, property);
+            return CommandDefinitionManager.GetProperty(Name, property);
         }
 
-        public virtual void Execute()
-        {
-            
-        }
+        public abstract void Execute();
     }
 }

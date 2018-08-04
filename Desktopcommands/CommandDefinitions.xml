@@ -4,4 +4,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="CommandDefinitions CommandDefinitions.xsd">
   <Command name="Command_History" call="history" shortcall="hist"></Command>
+  <Command name="Command_Youtube" call="youtube" shortcall="yt"></Command>
+  <Command name="Command_YoutubePlayList" call="youtubeplaylist" shortcall="ytpl"></Command>
 </Commands>

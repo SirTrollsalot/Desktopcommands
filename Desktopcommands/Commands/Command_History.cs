@@ -1,34 +1,40 @@
-﻿using Desktopcommands.Utilities;
+﻿using Desktopcommands.ResponseFields;
+using Desktopcommands.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Desktopcommands.Commands
 {
     public class Command_History : Command
     {
         private bool clearhist = false;
-        public Command_History(String args) : base("History")
+        public Command_History(string args) : base("Command_History")
         {
-            List<String> arguments = args.Split(' ').ToList<String>();
+            List<string> arguments = args.Split(' ').ToList<string>();
             if (arguments.Contains("clear"))
                 clearhist = true;
         }
 
         public override void Execute()
         {
-            base.Execute();
             if (clearhist)
                 HistoryManager.ClearHistory();
-            MainWindow.AppWindow.Dispatcher.Invoke(() =>
+            ResponseBox.KeyDown(EventHandler);
+            ResponseBox.SetItems(HistoryManager.GetHistory());
+        }
+
+        public void EventHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
             {
-                MainWindow.AppWindow.ResponseListboxItems = new ObservableCollection<String>(HistoryManager.GetHistory());
-            });
-            
-            //MainWindow.AppWindow.Done();
+                MainWindow.AppWindow.Inputfield.Text = ResponseBox.SelectedItem();
+                MainWindow.AppWindow.Inputfield.Focus();
+            }
         }
     }
 }
