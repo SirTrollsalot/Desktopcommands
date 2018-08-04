@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -24,6 +25,7 @@ namespace Desktopcommands
         [DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
+        static Mutex singleton = new Mutex(true, "Desktopcommands");
         private Command CurrentCommand;
         private const int HOTKEY_ID = 9000;
         
@@ -53,6 +55,11 @@ namespace Desktopcommands
 
         public MainWindow()
         {
+            if (!singleton.WaitOne(TimeSpan.Zero, true))
+            {
+                //there is already another instance running!
+                Application.Current.Shutdown();
+            }
             InitializeComponent();
             this.DataContext = this;
             AppWindow = this;

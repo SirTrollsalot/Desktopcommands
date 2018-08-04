@@ -12,7 +12,7 @@ namespace Desktopcommands.Commands.CommandUtilities
     {
         private static YouTubeService youtubeService = new YouTubeService(new BaseClientService.Initializer()
         {
-            ApiKey = "AIzaSyAdceopixMkCDwPi2qSQCyUfRpw2HW17gI",
+            ApiKey = Utilities.Utils.Getconfig<string>("APIKey"),
             ApplicationName = "Desktopcommands"
         });
 
