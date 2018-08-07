@@ -6,4 +6,7 @@
   <Command name="Command_History" call="history" shortcall="hist"></Command>
   <Command name="Command_Youtube" call="youtube" shortcall="yt"></Command>
   <Command name="Command_YoutubePlayList" call="youtubeplaylist" shortcall="ytpl"></Command>
+  <Command name="Command_Shutdown" call="shutdown"></Command>
+  <Command name="Command_Exit" call="exit" shortcall="x"></Command>
+  <Command name="Command_Help" call="help" shortcall="h"></Command>
 </Commands>

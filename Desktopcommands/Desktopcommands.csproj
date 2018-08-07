@@ -80,6 +80,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\CommandUtilities\Youtube.cs" />
+    <Compile Include="Commands\Command_Exit.cs" />
+    <Compile Include="Commands\Command_Help.cs" />
+    <Compile Include="Commands\Command_Shutdown.cs" />
     <Compile Include="Commands\Command_YoutubePlayList.cs" />
     <Compile Include="Commands\Command_Youtube.cs" />
     <Compile Include="ResponseFields\ResponseBox.cs" />

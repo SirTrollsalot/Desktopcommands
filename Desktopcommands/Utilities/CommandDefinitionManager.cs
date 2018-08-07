@@ -14,6 +14,7 @@ namespace Desktopcommands.Utilities
         
         public static Dictionary<List<string>, string> GetAllCommands()
         {
+            //List<string> are the calls and string is the name
             Dictionary<List<string>, string> ret = new Dictionary<List<string>, string>();
             foreach(var com in commands.Elements())
             {
