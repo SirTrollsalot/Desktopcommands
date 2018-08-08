@@ -9,4 +9,5 @@
   <Command name="Command_Shutdown" call="shutdown"></Command>
   <Command name="Command_Exit" call="exit" shortcall="x"></Command>
   <Command name="Command_Help" call="help" shortcall="h"></Command>
+  <Command name="Command_Run" call="run" shortcall="r"></Command>
 </Commands>
